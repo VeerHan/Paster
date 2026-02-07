@@ -94,6 +94,9 @@ struct MenuBarView: View {
                 // 搜索按钮
                 Button {
                     withAnimation(.easeInOut(duration: 0.2)) {
+                        if showSearch {
+                            viewModel.searchText = ""
+                        }
                         showSearch.toggle()
                     }
                 } label: {

@@ -54,3 +54,6 @@ build.log
 # Xcode project-specific (保留 project.pbxproj)
 # 排除生成/缓存的配置文件
 .claude/settings.local.json
+
+# 本地发布指南（不纳入版本控制）
+PUBLISH.md
