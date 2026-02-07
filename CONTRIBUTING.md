@@ -6,7 +6,7 @@
 
 ### 报告问题
 
-- 在 [Issues](../../issues) 中搜索是否已有类似问题
+- 在 [Issues](../issues) 中搜索是否已有类似问题
 - 若无，请新建 Issue，并尽量包含：
   - 系统版本（macOS 版本号）
   - 复现步骤
@@ -19,7 +19,7 @@
 3. 遵循现有代码风格（Swift 推荐使用 [Swift API Design Guidelines](https://swift.org/documentation/api-design-guidelines/)）
 4. 确保项目可以正常编译运行
 5. 提交并 Push 到你的 Fork
-6. 在本仓库创建 **Pull Request**，简要描述改动内容
+6. 在本仓库创建 [Pull Request](../pulls)，简要描述改动内容
 
 ### 代码风格
 
