@@ -12,7 +12,7 @@
 1. 登录 [GitHub](https://github.com)
 2. 点击右上角 **+** → **New repository**
 3. 填写信息：
-   - **Repository name**: `mac-paste`（或你喜欢的名字）
+   - **Repository name**: `Paster`
    - **Description**: `macOS 剪贴板历史管理器 - 轻量、美观的菜单栏工具`
    - 选择 **Public**
    - **不要**勾选 "Add a README file"（本地已有）
@@ -23,10 +23,10 @@
 在终端执行（将 `YOUR_USERNAME` 替换为你的 GitHub 用户名）：
 
 ```bash
-cd /Users/veer/VibeCodingProjects/mac-paste
+cd /path/to/Paster   # 或你的项目目录
 
 # 添加远程仓库
-git remote add origin https://github.com/YOUR_USERNAME/mac-paste.git
+git remote add origin https://github.com/YOUR_USERNAME/Paster.git
 
 # 推送到 GitHub
 git push -u origin main
@@ -35,7 +35,7 @@ git push -u origin main
 若使用 SSH：
 
 ```bash
-git remote add origin git@github.com:YOUR_USERNAME/mac-paste.git
+git remote add origin git@github.com:YOUR_USERNAME/Paster.git
 git push -u origin main
 ```
 

@@ -37,7 +37,7 @@
 
 ### 从 Release 安装
 
-1. 前往 [Releases](https://github.com/YOUR_USERNAME/mac-paste/releases) 页面（将 `YOUR_USERNAME` 替换为你的 GitHub 用户名）
+1. 前往 [Releases](https://github.com/YOUR_USERNAME/Paster/releases) 页面（将 `YOUR_USERNAME` 替换为你的 GitHub 用户名）
 2. 下载最新版本的 `Paster.app.zip`
 3. 解压后将 `Paster.app` 拖入「应用程序」文件夹
 4. 首次运行时，在「系统设置 > 隐私与安全性 > 辅助功能」中授权访问
@@ -55,13 +55,11 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/YOUR_USERNAME/mac-paste.git
-cd mac-paste
+git clone https://github.com/YOUR_USERNAME/Paster.git
+cd Paster
 
 # 使用 Xcode 打开项目
 open Paster.xcodeproj
-# 或
-open 剪剪.xcodeproj
 ```
 
 在 Xcode 中选择目标设备为「My Mac」，点击运行 (⌘R) 即可构建并运行。
@@ -85,7 +83,7 @@ xcodegen generate
 ## 项目结构
 
 ```
-mac-paste/
+Paster/
 ├── macPaste/
 │   ├── App/           # 应用入口
 │   ├── Models/        # 数据模型
