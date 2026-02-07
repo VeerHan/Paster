@@ -1,0 +1,56 @@
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# CocoaPods
+Pods/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.localized
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+
+# IDE
+.idea/
+*.swp
+*.swo
+*~
+.vscode/
+
+# Environment & Secrets
+.env
+.env.local
+*.local
+.secrets
+
+# Logs
+*.log
+build.log
+
+# Xcode project-specific (保留 project.pbxproj)
+# 排除生成/缓存的配置文件
+.claude/settings.local.json
