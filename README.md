@@ -21,11 +21,9 @@
 ## 功能特性
 
 - **📋 剪贴板监控**：自动记录复制到剪贴板的内容
-- **📝 多种类型支持**：纯文本、富文本、图片、链接、文件路径
+- **📝 文本与图片**：支持纯文本和图片的复制与粘贴
 - **🔍 搜索**：快速搜索历史记录
-- **📌 固定**：重要内容可固定到顶部
-- **⚙️ 可配置**：历史数量、图片上限、开机自启动等
-- **🗑️ 缓存管理**：支持清理图片缓存，节省磁盘空间
+- **🗑️ 清空历史**：清空时自动清理图片缓存，节省磁盘空间
 - **🚀 菜单栏常驻**：轻量运行，不占用 Dock 空间
 
 ## 系统要求
@@ -37,7 +35,7 @@
 
 ### 从 Release 安装
 
-1. 前往 [Releases](https://github.com/YOUR_USERNAME/Paster/releases) 页面（将 `YOUR_USERNAME` 替换为你的 GitHub 用户名）
+1. 前往 [Releases](https://github.com/VeerHan/Paster/releases) 页面（将 `VeerHan` 替换为你的 GitHub 用户名）
 2. 下载最新版本的 `Paster.app.zip`
 3. 解压后将 `Paster.app` 拖入「应用程序」文件夹
 4. 首次运行时，在「系统设置 > 隐私与安全性 > 辅助功能」中授权访问
@@ -47,7 +45,7 @@
 1. 点击菜单栏的剪贴板图标打开 Paster
 2. 复制任意文本或图片，内容会自动出现在历史列表中
 3. 点击历史项即可再次复制到剪贴板
-4. 使用搜索图标进行筛选，使用固定图标保留重要内容
+4. 使用搜索图标快速筛选历史内容
 
 ## 构建
 
@@ -55,7 +53,7 @@
 
 ```bash
 # 克隆仓库
-git clone https://github.com/YOUR_USERNAME/Paster.git
+git clone https://github.com/VeerHan/Paster.git
 cd Paster
 
 # 使用 Xcode 打开项目
@@ -100,7 +98,6 @@ Paster/
 - **SwiftUI** + **AppKit**：原生 macOS 界面
 - **Swift 5.9**：现代 Swift 语言特性
 - **Combine**：响应式数据流
-- **ServiceManagement**：开机自启动（macOS 13+）
 
 ## 贡献
 
