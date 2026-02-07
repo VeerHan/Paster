@@ -159,18 +159,21 @@ struct MenuBarView: View {
 
             // 剪贴板列表
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: 0) {
+                Group {
                     if viewModel.filteredItems.isEmpty {
                         EmptyHistoryView()
                     } else {
-                        ForEach(viewModel.filteredItems.prefix(100)) { item in
-                            MenuBarItemRow(item: item)
-                                .environmentObject(viewModel)
-                                .onTapGesture {
-                                    viewModel.copyItem(item)
-                                    dismiss()
-                                }
+                        LazyVStack(alignment: .leading, spacing: 0) {
+                            ForEach(viewModel.filteredItems.prefix(100)) { item in
+                                MenuBarItemRow(item: item)
+                                    .environmentObject(viewModel)
+                                    .onTapGesture {
+                                        viewModel.copyItem(item)
+                                        dismiss()
+                                    }
+                            }
                         }
+                        .frame(maxWidth: .infinity, minHeight: 340, alignment: .topLeading)
                     }
                 }
             }
@@ -197,9 +200,8 @@ struct EmptyHistoryView: View {
                 .font(.caption)
                 .foregroundColor(.gray.opacity(0.6))
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 40)
-        .padding(.leading, 20)
+        .frame(maxWidth: .infinity, minHeight: 340)
+        .contentShape(Rectangle())
     }
 }
 
