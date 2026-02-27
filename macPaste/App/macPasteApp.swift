@@ -17,7 +17,6 @@ class ApplicationDelegate: NSObject, NSApplicationDelegate {
 @main
 struct ClipperApp: App {
     @NSApplicationDelegateAdaptor(ApplicationDelegate.self) var appDelegate
-    @StateObject private var clipboardMonitor = ClipboardMonitor.shared
 
     var body: some Scene {
         // 主界面由状态栏图标 + 全局快捷键 Cmd+Shift+V 唤起（StatusBarManager）

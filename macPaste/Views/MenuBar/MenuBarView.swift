@@ -235,11 +235,12 @@ struct MenuBarView: View {
                     } else {
                         LazyVStack(alignment: .leading, spacing: 0) {
                             ForEach(viewModel.filteredItems.prefix(100)) { item in
-                                MenuBarItemRow(item: item)
-                                    .environmentObject(viewModel)
-                                    .onTapGesture {
-                                        pasteAndClose?(item)
-                                    }
+                                MenuBarItemRow(item: item) { itemToDelete in
+                                    ClipboardHistory.shared.deleteItem(itemToDelete)
+                                }
+                                .onTapGesture {
+                                    pasteAndClose?(item)
+                                }
                             }
                         }
                         .frame(maxWidth: .infinity, minHeight: 340, alignment: .topLeading)
@@ -274,19 +275,17 @@ struct EmptyHistoryView: View {
     }
 }
 
-/// 菜单栏条目行
+/// 菜单栏条目行 — 独立于 ViewModel，hover 不会触发列表重绘
 struct MenuBarItemRow: View {
     let item: ClipboardItem
-    @EnvironmentObject var viewModel: ClipboardViewModel
+    let onDelete: (ClipboardItem) -> Void
     @State private var isHovered = false
 
     var body: some View {
         HStack(alignment: .top, spacing: 10) {
-            // 类型图标
             TypeBadge(contentType: item.contentType)
                 .frame(width: 28, height: 28)
 
-            // 内容预览
             VStack(alignment: .leading, spacing: 2) {
                 if item.contentType == .image, let imageData = item.imageData,
                    let thumb = ThumbnailCache.shared.thumbnail(for: item.id, imageData: imageData) {
@@ -308,7 +307,7 @@ struct MenuBarItemRow: View {
 
             if isHovered {
                 Button {
-                    ClipboardHistory.shared.deleteItem(item)
+                    onDelete(item)
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .font(.caption)

@@ -9,6 +9,7 @@ class ClipboardViewModel: ObservableObject {
     @Published var selectedType: ClipboardContentType? = nil
     @Published var selectedItem: ClipboardItem? = nil
     @Published var isMenuBarVisible = false
+    @Published private(set) var filteredItems: [ClipboardItem] = []
 
     let history: ClipboardHistory
 
@@ -16,21 +17,11 @@ class ClipboardViewModel: ObservableObject {
 
     private init() {
         self.history = ClipboardHistory.shared
-        setupNotifications()
         bindHistoryChanges()
+        recomputeFilteredItems()
     }
 
     // MARK: - 公开方法
-
-    /// 过滤后的条目
-    var filteredItems: [ClipboardItem] {
-        history.searchItems(searchText, typeFilter: selectedType)
-    }
-
-    /// 按类型分组的条目
-    var groupedItems: [(type: ClipboardContentType, items: [ClipboardItem])] {
-        history.groupedItems()
-    }
 
     /// 切换类型筛选
     func toggleTypeFilter(_ type: ClipboardContentType) {
@@ -39,6 +30,7 @@ class ClipboardViewModel: ObservableObject {
         } else {
             selectedType = type
         }
+        recomputeFilteredItems()
     }
 
     /// 复制条目到剪贴板
@@ -78,20 +70,23 @@ class ClipboardViewModel: ObservableObject {
 
     // MARK: - 私有方法
 
-    private func setupNotifications() {
-        NotificationCenter.default.publisher(for: .clipboardDidChange)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.objectWillChange.send()
-            }
-            .store(in: &cancellables)
+    private func recomputeFilteredItems() {
+        filteredItems = history.searchItems(searchText, typeFilter: selectedType)
     }
 
     private func bindHistoryChanges() {
         history.objectWillChange
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.objectWillChange.send()
+                self?.recomputeFilteredItems()
+            }
+            .store(in: &cancellables)
+
+        $searchText
+            .removeDuplicates()
+            .debounce(for: .milliseconds(100), scheduler: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.recomputeFilteredItems()
             }
             .store(in: &cancellables)
     }

@@ -5,8 +5,7 @@ import AppKit
 class ClipboardMonitor: ObservableObject {
     static let shared = ClipboardMonitor()
 
-    @Published private(set) var isMonitoring = false
-    @Published private(set) var lastChangeCount: Int = 0
+    private(set) var isMonitoring = false
 
     private let pasteboard = NSPasteboard.general
     private var timer: DispatchSourceTimer?
@@ -32,11 +31,9 @@ class ClipboardMonitor: ObservableObject {
 
         isMonitoring = true
         changeCount = pasteboard.changeCount
-        lastChangeCount = changeCount
         lastChangeAt = Date()
         currentInterval = activeInterval
 
-        // 使用 GCD 定时器：更省电，允许系统合并唤醒
         let timer = DispatchSource.makeTimerSource(queue: queue)
         timer.setEventHandler { [weak self] in
             self?.checkForChanges()
@@ -44,9 +41,6 @@ class ClipboardMonitor: ObservableObject {
         timer.schedule(deadline: .now(), repeating: currentInterval, leeway: .milliseconds(150))
         timer.resume()
         self.timer = timer
-
-        // 立即检查一次
-        checkForChanges()
     }
 
     /// 停止监控剪贴板
@@ -63,7 +57,6 @@ class ClipboardMonitor: ObservableObject {
 
         if currentChangeCount != changeCount {
             changeCount = currentChangeCount
-            lastChangeCount = currentChangeCount
             lastChangeAt = Date()
             updateTimerIntervalIfNeeded()
             handlePasteboardChange()
@@ -84,24 +77,10 @@ class ClipboardMonitor: ObservableObject {
     }
 
     private func handlePasteboardChange() {
-        guard let item = ClipboardItem.fromPasteboard(pasteboard) else {
-            return
-        }
-
-        ClipboardHistory.shared.addItem(item)
-
-        // 发送通知（用于 UI 更新）
+        let pb = pasteboard
         DispatchQueue.main.async {
-            NotificationCenter.default.post(
-                name: .clipboardDidChange,
-                object: item
-            )
+            guard let item = ClipboardItem.fromPasteboard(pb) else { return }
+            ClipboardHistory.shared.addItem(item)
         }
     }
-}
-
-// MARK: - 通知名称
-
-extension Notification.Name {
-    static let clipboardDidChange = Notification.Name("clipboardDidChange")
 }
