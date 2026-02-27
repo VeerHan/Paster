@@ -1,6 +1,47 @@
 import SwiftUI
 import AppKit
 
+/// 缩略图缓存，避免滚动时反复解码大图
+private final class ThumbnailCache {
+    static let shared = ThumbnailCache()
+    private let cache = NSCache<NSString, NSImage>()
+
+    private init() {
+        cache.countLimit = 100
+    }
+
+    func thumbnail(for itemId: UUID, imageData: Data, maxSize: CGFloat = 160) -> NSImage? {
+        let key = itemId.uuidString as NSString
+        if let cached = cache.object(forKey: key) {
+            return cached
+        }
+        guard let source = NSImage(data: imageData) else { return nil }
+        let originalSize = source.size
+        guard originalSize.width > 0, originalSize.height > 0 else { return nil }
+
+        let scale = min(maxSize / originalSize.width, maxSize / originalSize.height, 1.0)
+        let targetSize = NSSize(width: originalSize.width * scale, height: originalSize.height * scale)
+
+        let thumb = NSImage(size: targetSize)
+        thumb.lockFocus()
+        source.draw(in: NSRect(origin: .zero, size: targetSize),
+                    from: NSRect(origin: .zero, size: originalSize),
+                    operation: .copy, fraction: 1.0)
+        thumb.unlockFocus()
+
+        cache.setObject(thumb, forKey: key)
+        return thumb
+    }
+
+    func evict(_ itemId: UUID) {
+        cache.removeObject(forKey: itemId.uuidString as NSString)
+    }
+
+    func evictAll() {
+        cache.removeAllObjects()
+    }
+}
+
 /// 手势识别器包装器
 struct SwipeGestureView: NSViewRepresentable {
     let onSwipeLeft: () -> Void
@@ -135,6 +176,7 @@ struct MenuBarView: View {
                 Button {
                     ClipboardHistory.shared.clearHistory()
                     ClipboardHistory.shared.clearImageCache()
+                    ThumbnailCache.shared.evictAll()
                     viewModel.searchText = ""
                 } label: {
                     Image(systemName: "trash")
@@ -246,8 +288,9 @@ struct MenuBarItemRow: View {
 
             // 内容预览
             VStack(alignment: .leading, spacing: 2) {
-                if item.contentType == .image, let imageData = item.imageData, let nsImage = NSImage(data: imageData) {
-                    Image(nsImage: nsImage)
+                if item.contentType == .image, let imageData = item.imageData,
+                   let thumb = ThumbnailCache.shared.thumbnail(for: item.id, imageData: imageData) {
+                    Image(nsImage: thumb)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: 160, maxHeight: 80, alignment: .leading)
