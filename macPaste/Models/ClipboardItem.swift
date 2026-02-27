@@ -2,31 +2,22 @@ import Foundation
 import AppKit
 import CryptoKit
 
-/// 剪贴板内容类型
+/// 剪贴板内容类型（仅支持文本与图片）
 enum ClipboardContentType: String, Codable, CaseIterable {
     case plainText = "plain_text"
-    case richText = "rich_text"
     case image = "image"
-    case url = "url"
-    case filePath = "file_path"
 
     var displayName: String {
         switch self {
         case .plainText: return "文本"
-        case .richText: return "文本"
         case .image: return "图片"
-        case .url: return "文本"
-        case .filePath: return "文本"
         }
     }
 
     var systemImage: String {
         switch self {
         case .plainText: return "doc.text"
-        case .richText: return "doc.text"
         case .image: return "photo"
-        case .url: return "doc.text"
-        case .filePath: return "doc.text"
         }
     }
 }
@@ -36,10 +27,7 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
     let id: UUID
     let contentType: ClipboardContentType
     let textContent: String?
-    let htmlContent: String?
     let imageData: Data?
-    let url: URL?
-    let filePath: String?
     let createdAt: Date
     var isPinned: Bool
 
@@ -47,23 +35,16 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
         hasher.combine(id)
     }
 
-    // 用于比较的哈希值
     var contentHash: String {
         switch contentType {
         case .plainText:
             return textContent ?? ""
-        case .richText:
-            return htmlContent ?? textContent ?? ""
         case .image:
             if let data = imageData {
                 let digest = SHA256.hash(data: data)
                 return digest.map { String(format: "%02x", $0) }.joined()
             }
             return ""
-        case .url:
-            return url?.absoluteString ?? ""
-        case .filePath:
-            return filePath ?? ""
         }
     }
 
@@ -71,20 +52,14 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
         id: UUID = UUID(),
         contentType: ClipboardContentType,
         textContent: String? = nil,
-        htmlContent: String? = nil,
         imageData: Data? = nil,
-        url: URL? = nil,
-        filePath: String? = nil,
         createdAt: Date = Date(),
         isPinned: Bool = false
     ) {
         self.id = id
         self.contentType = contentType
         self.textContent = textContent
-        self.htmlContent = htmlContent
         self.imageData = imageData
-        self.url = url
-        self.filePath = filePath
         self.createdAt = createdAt
         self.isPinned = isPinned
     }
@@ -120,7 +95,7 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
         pasteboard.clearContents()
 
         switch contentType {
-        case .plainText, .richText, .url, .filePath:
+        case .plainText:
             if let text = textContent {
                 pasteboard.setString(text, forType: .string)
             }
@@ -135,7 +110,7 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
     /// 获取预览文本
     var previewText: String {
         switch contentType {
-        case .plainText, .richText, .url, .filePath:
+        case .plainText:
             if let text = textContent {
                 let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
                 let normalized = trimmed.replacingOccurrences(of: "\r\n", with: "\n")
@@ -150,20 +125,5 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
         case .image:
             return "[图片]"
         }
-    }
-}
-
-/// HTML 标签去除扩展
-extension String {
-    func strippingHTMLTags() -> String {
-        guard let data = self.data(using: .utf8) else { return self }
-        if let attributedString = try? NSAttributedString(
-            data: data,
-            options: [.documentType: NSAttributedString.DocumentType.html],
-            documentAttributes: nil
-        ) {
-            return attributedString.string
-        }
-        return self.replacingOccurrences(of: "<[^>]+>", with: "", options: .regularExpression)
     }
 }

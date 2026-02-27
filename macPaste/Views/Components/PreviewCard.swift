@@ -54,34 +54,10 @@ struct TextPreviewCard: View {
     }
 }
 
-/// URL 预览卡片
-struct URLPreviewCard: View {
-    let url: URL
-
-    var body: some View {
-        HStack {
-            Image(systemName: "link")
-                .foregroundColor(.cyan)
-            Text(url.absoluteString)
-                .font(.body)
-                .foregroundColor(.cyan)
-                .lineLimit(1)
-            Spacer()
-        }
-        .padding()
-        .background(Color.cyan.opacity(0.1))
-        .cornerRadius(8)
-    }
-}
-
 #Preview {
     VStack(spacing: 16) {
         PreviewCard(title: "文本内容", systemImage: "doc.text") {
             TextPreviewCard("这是一段测试文本，用于展示预览卡片的效果。")
-        }
-
-        PreviewCard(systemImage: "link") {
-            URLPreviewCard(url: URL(string: "https://www.apple.com/cn/")!)
         }
 
         PreviewCard(title: "图片") {

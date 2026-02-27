@@ -1,0 +1,25 @@
+---
+description: 改完代码后必须重新编译安装并重启 Paster 应用
+alwaysApply: true
+---
+
+# Paster 部署与重启
+
+对本项目（mac-paste / Paster）做完代码修改后，**必须**完成以下步骤再结束：
+
+1. **编译**：在项目根目录执行  
+   `xcodebuild -scheme macPaste -configuration Debug -derivedDataPath build build`
+2. **安装**：将产物复制到应用程序  
+   `cp -R build/Build/Products/Debug/Paster.app /Applications/`
+3. **关闭当前应用**：结束已运行的 Paster 进程  
+   `killall Paster 2>/dev/null` 或 `pkill -9 Paster 2>/dev/null`
+4. **重新打开**：  
+   `open -a /Applications/Paster.app`
+
+可合并为一条命令执行：
+```bash
+cd /Users/veer/VibeCodingProjects/mac-paste && \
+xcodebuild -scheme macPaste -configuration Debug -derivedDataPath build build -quiet && \
+cp -R build/Build/Products/Debug/Paster.app /Applications/ && \
+killall Paster 2>/dev/null; open -a /Applications/Paster.app
+```

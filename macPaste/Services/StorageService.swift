@@ -48,10 +48,7 @@ class StorageService {
                         id: item.id,
                         contentType: .image,
                         textContent: item.textContent,
-                        htmlContent: item.htmlContent,
                         imageData: nil,
-                        url: item.url,
-                        filePath: item.filePath,
                         createdAt: item.createdAt,
                         isPinned: item.isPinned
                     )
@@ -85,10 +82,7 @@ class StorageService {
                         id: items[i].id,
                         contentType: .image,
                         textContent: items[i].textContent,
-                        htmlContent: items[i].htmlContent,
                         imageData: imageData,
-                        url: items[i].url,
-                        filePath: items[i].filePath,
                         createdAt: items[i].createdAt,
                         isPinned: items[i].isPinned
                     )

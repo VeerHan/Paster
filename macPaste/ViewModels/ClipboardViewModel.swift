@@ -46,6 +46,11 @@ class ClipboardViewModel: ObservableObject {
         item.copyToPasteboard()
     }
 
+    /// 将条目粘贴到当前光标处（复制后自动 Cmd+V）
+    func pasteItemAtCursor(_ item: ClipboardItem) {
+        PasteService.pasteItemAtCursor(item)
+    }
+
     /// 删除条目
     func deleteItem(_ item: ClipboardItem) {
         history.deleteItem(item)

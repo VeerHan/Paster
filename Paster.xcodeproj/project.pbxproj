@@ -18,6 +18,9 @@
 		A8116F3EABBCAE25E2BA5056 /* TypeBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E8111AD02FA3F343CFFD18 /* TypeBadge.swift */; };
 		B9FB0158E5B553112372656D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 850EF61E8465808CF9DA8CD2 /* Assets.xcassets */; };
 		F12DDE01F636224F5320540C /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C437D84EC3B7849FF75EB2 /* ClipboardMonitor.swift */; };
+		A1B2C3D4E5F6012345678901 /* PasteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6012345678902 /* PasteService.swift */; };
+		A1B2C3D4E5F6012345678903 /* GlobalHotKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */; };
+		A1B2C3D4E5F6012345678905 /* StatusBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +38,9 @@
 		CD29376D0F9B808B2B0589AC /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
 		D3D80BC3B3F3A8AB91241C04 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		FD67AC1BE4E8BC0178E2A861 /* macPasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = macPasteApp.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6012345678902 /* PasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKeyManager.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -61,6 +67,9 @@
 			children = (
 				C5C437D84EC3B7849FF75EB2 /* ClipboardMonitor.swift */,
 				D3D80BC3B3F3A8AB91241C04 /* StorageService.swift */,
+				A1B2C3D4E5F6012345678902 /* PasteService.swift */,
+				A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */,
+				A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -217,6 +226,9 @@
 				409E6B75A223491743CD2349 /* PreviewCard.swift in Sources */,
 				302B843BAC5F053A42DFB62C /* SettingsView.swift in Sources */,
 				83EFBFEAEB15B841F72CE246 /* StorageService.swift in Sources */,
+				A1B2C3D4E5F6012345678901 /* PasteService.swift in Sources */,
+				A1B2C3D4E5F6012345678903 /* GlobalHotKeyManager.swift in Sources */,
+				A1B2C3D4E5F6012345678905 /* StatusBarManager.swift in Sources */,
 				A8116F3EABBCAE25E2BA5056 /* TypeBadge.swift in Sources */,
 				0C4DCE0A8299AAD83D6008EF /* macPasteApp.swift in Sources */,
 			);

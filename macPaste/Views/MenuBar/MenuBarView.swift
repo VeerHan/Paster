@@ -72,10 +72,32 @@ struct SwipeGestureView: NSViewRepresentable {
     }
 }
 
+/// 从外部关闭 Popover 的 Environment Key
+private struct ClosePopoverKey: EnvironmentKey {
+    static let defaultValue: (() -> Void)? = nil
+}
+
+/// 选中条目后由外部统一处理（关面板+恢复焦点+粘贴）
+private struct PasteAndCloseKey: EnvironmentKey {
+    static let defaultValue: ((ClipboardItem) -> Void)? = nil
+}
+
+extension EnvironmentValues {
+    var closePopover: (() -> Void)? {
+        get { self[ClosePopoverKey.self] }
+        set { self[ClosePopoverKey.self] = newValue }
+    }
+    var pasteAndClose: ((ClipboardItem) -> Void)? {
+        get { self[PasteAndCloseKey.self] }
+        set { self[PasteAndCloseKey.self] = newValue }
+    }
+}
+
 /// 菜单栏弹出视图
 struct MenuBarView: View {
     @EnvironmentObject var viewModel: ClipboardViewModel
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.closePopover) private var closePopover
+    @Environment(\.pasteAndClose) private var pasteAndClose
     @State private var showSearch = false
 
     var body: some View {
@@ -86,6 +108,9 @@ struct MenuBarView: View {
                     .foregroundColor(.accentColor)
                 Text("Paster")
                     .font(.system(size: 15, weight: .semibold))
+                Text("⌘⇧V")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(.secondary)
                 Spacer()
                 Text("\(viewModel.history.items.count) 条")
                     .font(.system(size: 12))
@@ -171,8 +196,7 @@ struct MenuBarView: View {
                                 MenuBarItemRow(item: item)
                                     .environmentObject(viewModel)
                                     .onTapGesture {
-                                        viewModel.copyItem(item)
-                                        dismiss()
+                                        pasteAndClose?(item)
                                     }
                             }
                         }

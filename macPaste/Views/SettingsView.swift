@@ -3,7 +3,6 @@ import ServiceManagement
 
 /// 设置视图
 struct SettingsView: View {
-    @EnvironmentObject var appState: AppState
     @AppStorage("maxHistoryCount") private var maxHistoryCount = 500
     @AppStorage("maxImageCount") private var maxImageCount = 50
     @AppStorage("autoStart") private var autoStart = true
@@ -17,9 +16,7 @@ struct SettingsView: View {
                 VStack(alignment: .leading, spacing: 8) {
                     ForEach([
                         ("纯文本", "doc.text", "任意文本内容"),
-                        ("图片", "photo", "PNG/JPEG/GIF 等"),
-                        ("链接", "link", "URL 网址"),
-                        ("文件路径", "folder", "本地文件路径")
+                        ("图片", "photo", "PNG/JPEG/GIF 等")
                     ], id: \.0) { item in
                         HStack {
                             Image(systemName: item.1)
@@ -158,5 +155,4 @@ struct SettingsView: View {
 
 #Preview {
     SettingsView()
-        .environmentObject(AppState())
 }

@@ -5,33 +5,28 @@ import AppKit
 class ApplicationDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
+        ClipboardMonitor.shared.startMonitoring()
+        StatusBarManager.shared.setup()
+        // 启动时一次性请求辅助功能权限，避免点击条目时反复弹窗
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            PasteService.requestAccessibilityIfNeeded()
+        }
     }
 }
 
 @main
 struct ClipperApp: App {
     @NSApplicationDelegateAdaptor(ApplicationDelegate.self) var appDelegate
-    @StateObject private var appState = AppState()
     @StateObject private var clipboardMonitor = ClipboardMonitor.shared
-    @StateObject private var viewModel = ClipboardViewModel.shared
 
     var body: some Scene {
-        MenuBarExtra("Paster", systemImage: "doc.on.clipboard") {
-            MenuBarView()
-                .environmentObject(appState)
-                .environmentObject(viewModel)
+        // 主界面由状态栏图标 + 全局快捷键 Cmd+Shift+V 唤起（StatusBarManager）
+        WindowGroup {
+            EmptyView()
+                .frame(width: 0, height: 0)
         }
-        .menuBarExtraStyle(.window)
-
-    }
-}
-
-class AppState: ObservableObject {
-    @Published var showSettings = false
-    @Published var isMonitoring = false
-
-    init() {
-        isMonitoring = true
-        ClipboardMonitor.shared.startMonitoring()
+        .windowResizability(.contentSize)
+        .defaultSize(width: 0, height: 0)
+        .commandsRemoved()
     }
 }

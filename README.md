@@ -65,10 +65,25 @@ open Paster.xcodeproj
 ### 使用命令行
 
 ```bash
-xcodebuild -project Paster.xcodeproj -scheme Paster -configuration Release build
+xcodebuild -scheme macPaste -configuration Release -derivedDataPath build build
 ```
 
 构建产物位于 `build/Build/Products/Release/Paster.app`。
+
+### 打包分发（DMG）
+
+在项目根目录执行：
+
+```bash
+./scripts/build-release.sh
+```
+
+会在 `dist/` 下生成：
+- **Paster-1.0.0.dmg**：标准 macOS 安装镜像，双击后把 Paster 拖到 Applications 即可
+
+支持 **macOS 13.0 (Ventura) 及以上**，同时兼容 **Apple Silicon (M1/M2/M3/M4)** 和 **Intel** 芯片。
+
+对方首次运行若提示「无法打开」或「来自未识别的开发者」，在「系统设置 > 隐私与安全性」中点击「仍要打开」即可（未公证的应用会如此提示）。
 
 ### 使用 XcodeGen（可选）
 
