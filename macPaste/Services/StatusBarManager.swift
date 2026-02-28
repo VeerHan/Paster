@@ -108,6 +108,7 @@ final class StatusBarManager: NSObject {
 
         NSApp.activate(ignoringOtherApps: true)
         panel.makeKeyAndOrderFront(nil)
+        NotificationCenter.default.post(name: .panelDidShow, object: nil)
 
         startEventMonitor()
     }

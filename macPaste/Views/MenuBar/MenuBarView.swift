@@ -113,6 +113,10 @@ struct SwipeGestureView: NSViewRepresentable {
     }
 }
 
+extension Notification.Name {
+    static let panelDidShow = Notification.Name("panelDidShow")
+}
+
 /// 从外部关闭 Popover 的 Environment Key
 private struct ClosePopoverKey: EnvironmentKey {
     static let defaultValue: (() -> Void)? = nil
@@ -140,14 +144,13 @@ struct MenuBarView: View {
     @Environment(\.closePopover) private var closePopover
     @Environment(\.pasteAndClose) private var pasteAndClose
     @State private var showSearch = false
+    @State private var scrollToTopTrigger = UUID()
     @FocusState private var isSearchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
             // 顶部标题栏
             HStack {
-                Image(systemName: "doc.on.clipboard.fill")
-                    .foregroundColor(.accentColor)
                 Text("Paster")
                     .font(.system(size: 15, weight: .semibold))
                 Text("⌘⇧V")
@@ -239,27 +242,47 @@ struct MenuBarView: View {
                 EmptyHistoryView()
                     .frame(height: 340)
             } else {
-                List(viewModel.filteredItems.prefix(50), id: \.id) { item in
-                    MenuBarItemRow(item: item) { itemToDelete in
-                        ClipboardHistory.shared.deleteItem(itemToDelete)
+                ScrollViewReader { proxy in
+                    let items = Array(viewModel.filteredItems.prefix(50))
+                    List(items.indices, id: \.self) { index in
+                        let item = items[index]
+                        MenuBarItemRow(item: item) { itemToDelete in
+                            ClipboardHistory.shared.deleteItem(itemToDelete)
+                        }
+                        .onTapGesture {
+                            pasteAndClose?(item)
+                        }
+                        .padding(.top, index == 0 ? 4 : 0)
+                        .padding(.bottom, index == items.count - 1 ? 4 : 0)
+                        .listRowInsets(EdgeInsets())
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.clear)
+                        .id(item.id)
                     }
-                    .onTapGesture {
-                        pasteAndClose?(item)
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .frame(height: 340)
+                    .onChange(of: scrollToTopTrigger) { _ in
+                        if let firstId = items.first?.id {
+                            proxy.scrollTo(firstId, anchor: .top)
+                        }
                     }
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.clear)
+                    .onChange(of: viewModel.filteredItems.first?.id) { _ in
+                        if let firstId = items.first?.id {
+                            withAnimation(.easeOut(duration: 0.15)) {
+                                proxy.scrollTo(firstId, anchor: .top)
+                            }
+                        }
+                    }
                 }
-                .listStyle(.plain)
-                .scrollContentBackground(.hidden)
-                .safeAreaInset(edge: .top, spacing: 0) { Spacer().frame(height: 6) }
-                .safeAreaInset(edge: .bottom, spacing: 0) { Spacer().frame(height: 6) }
-                .frame(height: 340)
             }
         }
         .frame(width: 300)
         .background(.clear)
         .animation(.easeInOut(duration: 0.2), value: showSearch)
+        .onReceive(NotificationCenter.default.publisher(for: .panelDidShow)) { _ in
+            scrollToTopTrigger = UUID()
+        }
     }
 
 }
