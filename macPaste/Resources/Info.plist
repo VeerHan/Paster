@@ -36,7 +36,7 @@
             <key>CFBundleTypeRole</key>
             <string>None</string>
             <key>CFBundleURLName</key>
-            <string>com.macpaste.app</string>
+            <string>com.veerhan.paster</string>
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>macpaste</string>

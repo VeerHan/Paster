@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 77;
+	objectVersion = 63;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -15,16 +15,16 @@
 		4D2182032BAAF4EFE9E07A47 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5CAE58CA65BE1B6DCA8BE47 /* MenuBarView.swift */; };
 		5A2A73DF7264A311F8485B6C /* ClipboardHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C041347A3B7994174E50EF1A /* ClipboardHistory.swift */; };
 		83EFBFEAEB15B841F72CE246 /* StorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3D80BC3B3F3A8AB91241C04 /* StorageService.swift */; };
-		A8116F3EABBCAE25E2BA5056 /* TypeBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E8111AD02FA3F343CFFD18 /* TypeBadge.swift */; };
-		B9FB0158E5B553112372656D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 850EF61E8465808CF9DA8CD2 /* Assets.xcassets */; };
-		F12DDE01F636224F5320540C /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C437D84EC3B7849FF75EB2 /* ClipboardMonitor.swift */; };
 		A1B2C3D4E5F6012345678901 /* PasteService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6012345678902 /* PasteService.swift */; };
 		A1B2C3D4E5F6012345678903 /* GlobalHotKeyManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */; };
 		A1B2C3D4E5F6012345678905 /* StatusBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */; };
+		A8116F3EABBCAE25E2BA5056 /* TypeBadge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56E8111AD02FA3F343CFFD18 /* TypeBadge.swift */; };
+		B9FB0158E5B553112372656D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 850EF61E8465808CF9DA8CD2 /* Assets.xcassets */; };
+		F12DDE01F636224F5320540C /* ClipboardMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5C437D84EC3B7849FF75EB2 /* ClipboardMonitor.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1E5B37DFA92172D22A066BDD /* macPaste.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = macPaste.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E5B37DFA92172D22A066BDD /* Paster.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Paster.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		45D763155575BD280681E377 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		56E8111AD02FA3F343CFFD18 /* TypeBadge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeBadge.swift; sourceTree = "<group>"; };
 		57DE1CBF70A9DF2941AAA3C5 /* PreviewCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewCard.swift; sourceTree = "<group>"; };
@@ -32,15 +32,15 @@
 		846CA2531C49FB0C16480AD8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		850EF61E8465808CF9DA8CD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9289D3808FF499ACB9C1FEF0 /* macPaste.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macPaste.entitlements; sourceTree = "<group>"; };
+		A1B2C3D4E5F6012345678902 /* PasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteService.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKeyManager.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
 		A5CAE58CA65BE1B6DCA8BE47 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
 		C041347A3B7994174E50EF1A /* ClipboardHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardHistory.swift; sourceTree = "<group>"; };
 		C5C437D84EC3B7849FF75EB2 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
 		CD29376D0F9B808B2B0589AC /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
 		D3D80BC3B3F3A8AB91241C04 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
 		FD67AC1BE4E8BC0178E2A861 /* macPasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = macPasteApp.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6012345678902 /* PasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteService.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKeyManager.swift; sourceTree = "<group>"; };
-		A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -102,7 +102,7 @@
 		6ED0B2A5A589E96B6187780C /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1E5B37DFA92172D22A066BDD /* macPaste.app */,
+				1E5B37DFA92172D22A066BDD /* Paster.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -165,7 +165,7 @@
 			packageProductDependencies = (
 			);
 			productName = macPaste;
-			productReference = 1E5B37DFA92172D22A066BDD /* macPaste.app */;
+			productReference = 1E5B37DFA92172D22A066BDD /* Paster.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -178,7 +178,6 @@
 				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					520A80346B15576917CEEB7E = {
-						DevelopmentTeam = "";
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -193,7 +192,6 @@
 			);
 			mainGroup = 53FAB7CCD0BD932187C08556;
 			minimizedProjectReferenceProxies = 1;
-			preferredProjectObjectVersion = 77;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -243,11 +241,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = macPaste/Resources/macPaste.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = Q788B885X5;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = macPaste/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				NSPrincipalClass = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = com.macpaste.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.veerhan.paster;
 				PRODUCT_NAME = Paster;
 				SDKROOT = macosx;
 			};
@@ -308,7 +310,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -326,11 +328,15 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = macPaste/Resources/macPaste.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
+				DEVELOPMENT_TEAM = Q788B885X5;
 				ENABLE_HARDENED_RUNTIME = NO;
 				INFOPLIST_FILE = macPaste/Resources/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
 				NSPrincipalClass = NSApplication;
-				PRODUCT_BUNDLE_IDENTIFIER = com.macpaste.app;
+				PRODUCT_BUNDLE_IDENTIFIER = com.veerhan.paster;
 				PRODUCT_NAME = Paster;
 				SDKROOT = macosx;
 			};
@@ -385,7 +391,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MARKETING_VERSION = 1.0.0;
+				MARKETING_VERSION = 1.0.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";

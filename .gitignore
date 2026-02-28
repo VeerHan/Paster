@@ -1,5 +1,6 @@
 # Xcode
 build/
+build-arm64/
 dist/
 DerivedData/
 *.pbxuser

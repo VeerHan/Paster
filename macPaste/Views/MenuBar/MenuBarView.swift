@@ -143,6 +143,7 @@ struct MenuBarView: View {
     @EnvironmentObject var viewModel: ClipboardViewModel
     @Environment(\.closePopover) private var closePopover
     @Environment(\.pasteAndClose) private var pasteAndClose
+    @Environment(\.colorScheme) private var colorScheme
     @State private var showSearch = false
     @State private var scrollToTopTrigger = UUID()
     @FocusState private var isSearchFocused: Bool
@@ -161,6 +162,8 @@ struct MenuBarView: View {
                     .font(.system(size: 12))
                     .foregroundColor(.secondary)
 
+                let hasItems = !viewModel.history.items.isEmpty
+
                 // 搜索按钮
                 Button {
                     withAnimation(.easeInOut(duration: 0.2)) {
@@ -171,9 +174,10 @@ struct MenuBarView: View {
                     }
                 } label: {
                     Image(systemName: showSearch ? "magnifyingglass.circle.fill" : "magnifyingglass")
-                        .foregroundColor(showSearch ? .accentColor : .secondary)
+                        .foregroundColor(hasItems ? (showSearch ? .accentColor : .secondary) : .secondary.opacity(0.4))
                 }
                 .buttonStyle(.plain)
+                .disabled(!hasItems)
                 .help(showSearch ? "关闭搜索" : "搜索")
 
                 // 清空按钮
@@ -182,11 +186,13 @@ struct MenuBarView: View {
                     ClipboardHistory.shared.clearImageCache()
                     ThumbnailCache.shared.evictAll()
                     viewModel.searchText = ""
+                    withAnimation(.easeInOut(duration: 0.2)) { showSearch = false }
                 } label: {
                     Image(systemName: "trash")
-                        .foregroundColor(.secondary)
+                        .foregroundColor(hasItems ? .secondary : .secondary.opacity(0.4))
                 }
                 .buttonStyle(.plain)
+                .disabled(!hasItems)
                 .help("清空")
 
                 // 退出按钮
@@ -223,7 +229,7 @@ struct MenuBarView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 10)
-                .background(Color(NSColor.textBackgroundColor))
+                .background(colorScheme == .dark ? Color(white: 0.22) : Color(white: 0.90))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .padding(.bottom, 8)
@@ -299,7 +305,7 @@ struct EmptyHistoryView: View {
                 .foregroundColor(.secondary)
             Text("复制文本或图片即可开始")
                 .font(.caption)
-                .foregroundColor(.gray.opacity(0.6))
+                .foregroundColor(.secondary)
         }
         .frame(maxWidth: .infinity, minHeight: 340)
         .contentShape(Rectangle())
