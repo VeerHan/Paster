@@ -329,7 +329,6 @@ struct MenuBarItemRow: View {
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .frame(maxWidth: 160, maxHeight: 80, alignment: .leading)
-                        .clipShape(RoundedRectangle(cornerRadius: 6))
                 } else {
                     Text(item.previewText)
                         .font(.system(size: 12))
