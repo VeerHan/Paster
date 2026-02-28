@@ -5,7 +5,7 @@ cd "$(dirname "$0")/.."
 ROOT="$PWD"
 BUILD_DIR="$ROOT/build"
 DIST_DIR="$ROOT/dist"
-SCHEME="macPaste"
+SCHEME="Paster"
 APP_NAME="Paster"
 VERSION=$(grep -m1 "MARKETING_VERSION" Paster.xcodeproj/project.pbxproj | sed 's/.*= //;s/;//;s/ *$//' || echo "1.0.0")
 DMG_NAME="${APP_NAME}-${VERSION}.dmg"

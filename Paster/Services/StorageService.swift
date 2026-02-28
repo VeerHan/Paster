@@ -18,7 +18,7 @@ class StorageService {
     // 存储路径
     private var applicationSupportDirectory: URL {
         let paths = fileManager.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-        return paths[0].appendingPathComponent("macPaste", isDirectory: true)
+        return paths[0].appendingPathComponent("Paster", isDirectory: true)
     }
 
     private var historyFileURL: URL {

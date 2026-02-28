@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0678ACC53C3A31A207A9B048 /* ClipboardViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 777873FB530C91D2A8186ACC /* ClipboardViewModel.swift */; };
-		0C4DCE0A8299AAD83D6008EF /* macPasteApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67AC1BE4E8BC0178E2A861 /* macPasteApp.swift */; };
+		0C4DCE0A8299AAD83D6008EF /* PasterApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FD67AC1BE4E8BC0178E2A861 /* PasterApp.swift */; };
 		2E8F65CCF25D6842F4C755A4 /* ClipboardItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD29376D0F9B808B2B0589AC /* ClipboardItem.swift */; };
 		302B843BAC5F053A42DFB62C /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 846CA2531C49FB0C16480AD8 /* SettingsView.swift */; };
 		409E6B75A223491743CD2349 /* PreviewCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57DE1CBF70A9DF2941AAA3C5 /* PreviewCard.swift */; };
@@ -31,7 +31,7 @@
 		777873FB530C91D2A8186ACC /* ClipboardViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardViewModel.swift; sourceTree = "<group>"; };
 		846CA2531C49FB0C16480AD8 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		850EF61E8465808CF9DA8CD2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		9289D3808FF499ACB9C1FEF0 /* macPaste.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = macPaste.entitlements; sourceTree = "<group>"; };
+		9289D3808FF499ACB9C1FEF0 /* Paster.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Paster.entitlements; sourceTree = "<group>"; };
 		A1B2C3D4E5F6012345678902 /* PasteService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasteService.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6012345678904 /* GlobalHotKeyManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKeyManager.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6012345678906 /* StatusBarManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
@@ -40,7 +40,7 @@
 		C5C437D84EC3B7849FF75EB2 /* ClipboardMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardMonitor.swift; sourceTree = "<group>"; };
 		CD29376D0F9B808B2B0589AC /* ClipboardItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClipboardItem.swift; sourceTree = "<group>"; };
 		D3D80BC3B3F3A8AB91241C04 /* StorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageService.swift; sourceTree = "<group>"; };
-		FD67AC1BE4E8BC0178E2A861 /* macPasteApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = macPasteApp.swift; sourceTree = "<group>"; };
+		FD67AC1BE4E8BC0178E2A861 /* PasterApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasterApp.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -49,7 +49,7 @@
 			children = (
 				850EF61E8465808CF9DA8CD2 /* Assets.xcassets */,
 				45D763155575BD280681E377 /* Info.plist */,
-				9289D3808FF499ACB9C1FEF0 /* macPaste.entitlements */,
+				9289D3808FF499ACB9C1FEF0 /* Paster.entitlements */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -57,7 +57,7 @@
 		384778E97BB4C4156B98D5A0 /* App */ = {
 			isa = PBXGroup;
 			children = (
-				FD67AC1BE4E8BC0178E2A861 /* macPasteApp.swift */,
+				FD67AC1BE4E8BC0178E2A861 /* PasterApp.swift */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -85,7 +85,7 @@
 		53FAB7CCD0BD932187C08556 = {
 			isa = PBXGroup;
 			children = (
-				B27B40F2D3597FDC4FBF8571 /* macPaste */,
+				B27B40F2D3597FDC4FBF8571 /* Paster */,
 				6ED0B2A5A589E96B6187780C /* Products */,
 			);
 			sourceTree = "<group>";
@@ -115,7 +115,7 @@
 			path = MenuBar;
 			sourceTree = "<group>";
 		};
-		B27B40F2D3597FDC4FBF8571 /* macPaste */ = {
+		B27B40F2D3597FDC4FBF8571 /* Paster */ = {
 			isa = PBXGroup;
 			children = (
 				384778E97BB4C4156B98D5A0 /* App */,
@@ -125,7 +125,7 @@
 				4DBD2BF6989115800FE756BB /* ViewModels */,
 				FCF39C94440D4C75DA5A7FCD /* Views */,
 			);
-			path = macPaste;
+			path = Paster;
 			sourceTree = "<group>";
 		};
 		F19E8C33F391A5D604B3FCE0 /* Components */ = {
@@ -150,9 +150,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		520A80346B15576917CEEB7E /* macPaste */ = {
+		520A80346B15576917CEEB7E /* Paster */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = ACABF03E6BB6F1E40704C9BA /* Build configuration list for PBXNativeTarget "macPaste" */;
+			buildConfigurationList = ACABF03E6BB6F1E40704C9BA /* Build configuration list for PBXNativeTarget "Paster" */;
 			buildPhases = (
 				20A41B1C5BC4975C323D632B /* Sources */,
 				7445E3BB5530550B835F2B0A /* Resources */,
@@ -161,10 +161,10 @@
 			);
 			dependencies = (
 			);
-			name = macPaste;
+			name = Paster;
 			packageProductDependencies = (
 			);
-			productName = macPaste;
+			productName = Paster;
 			productReference = 1E5B37DFA92172D22A066BDD /* Paster.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -195,7 +195,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				520A80346B15576917CEEB7E /* macPaste */,
+				520A80346B15576917CEEB7E /* Paster */,
 			);
 		};
 /* End PBXProject section */
@@ -228,7 +228,7 @@
 				A1B2C3D4E5F6012345678903 /* GlobalHotKeyManager.swift in Sources */,
 				A1B2C3D4E5F6012345678905 /* StatusBarManager.swift in Sources */,
 				A8116F3EABBCAE25E2BA5056 /* TypeBadge.swift in Sources */,
-				0C4DCE0A8299AAD83D6008EF /* macPasteApp.swift in Sources */,
+				0C4DCE0A8299AAD83D6008EF /* PasterApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -239,11 +239,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = macPaste/Resources/macPaste.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Paster/Resources/Paster.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Q788B885X5;
 				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = macPaste/Resources/Info.plist;
+				INFOPLIST_FILE = Paster/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -326,11 +326,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = macPaste/Resources/macPaste.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Paster/Resources/Paster.entitlements;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = Q788B885X5;
 				ENABLE_HARDENED_RUNTIME = NO;
-				INFOPLIST_FILE = macPaste/Resources/Info.plist;
+				INFOPLIST_FILE = Paster/Resources/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -414,7 +414,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		ACABF03E6BB6F1E40704C9BA /* Build configuration list for PBXNativeTarget "macPaste" */ = {
+		ACABF03E6BB6F1E40704C9BA /* Build configuration list for PBXNativeTarget "Paster" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				0AD74C09ACD36ECDD6763973 /* Debug */,

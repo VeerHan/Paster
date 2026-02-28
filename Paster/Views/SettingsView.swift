@@ -93,7 +93,7 @@ struct SettingsView: View {
     private func calculateCacheSize() {
         DispatchQueue.global(qos: .userInitiated).async {
             let imagesDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("macPaste/Images")
+                .appendingPathComponent("Paster/Images")
 
             if let enumerator = FileManager.default.enumerator(at: imagesDir, includingPropertiesForKeys: [.fileSizeKey]) {
                 var totalSize: Int64 = 0
@@ -119,7 +119,7 @@ struct SettingsView: View {
 
         DispatchQueue.global(qos: .userInitiated).async {
             let imagesDir = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)[0]
-                .appendingPathComponent("macPaste/Images")
+                .appendingPathComponent("Paster/Images")
 
             try? FileManager.default.removeItem(at: imagesDir)
             try? FileManager.default.createDirectory(at: imagesDir, withIntermediateDirectories: true)

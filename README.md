@@ -1,7 +1,7 @@
 # Paster - macOS 剪贴板历史管理器
 
 <p align="center">
-  <img src="macPaste/Resources/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="128" alt="Paster Icon">
+  <img src="Paster/Resources/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="128" alt="Paster Icon">
 </p>
 
 <p align="center">
@@ -69,7 +69,7 @@ open Paster.xcodeproj
 ### 使用命令行
 
 ```bash
-xcodebuild -scheme macPaste -configuration Release -derivedDataPath build build
+xcodebuild -scheme Paster -configuration Release -derivedDataPath build build
 ```
 
 构建产物位于 `build/Build/Products/Release/Paster.app`。
@@ -101,7 +101,7 @@ xcodegen generate
 
 ```
 Paster/
-├── macPaste/
+├── Paster/
 │   ├── App/           # 应用入口
 │   ├── Models/        # 数据模型（ClipboardItem、ClipboardHistory）
 │   ├── Services/      # 剪贴板监控、存储、粘贴服务、状态栏与全局热键
