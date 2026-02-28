@@ -1,14 +1,17 @@
 import SwiftUI
 import AppKit
 
-/// 状态栏图标 + Popover 管理（支持点击图标与全局快捷键唤起）
+/// 状态栏图标 + 面板管理（支持点击图标与全局快捷键唤起）
 final class StatusBarManager: NSObject {
     static let shared = StatusBarManager()
 
     private var statusItem: NSStatusItem?
-    private var popover: NSPopover?
+    private var panel: NSPanel?
+    private var eventMonitor: Any?
     private let viewModel = ClipboardViewModel.shared
     private var previousApp: NSRunningApplication?
+
+    private var isShown: Bool { panel?.isVisible == true }
 
     private override init() {
         super.init()
@@ -21,11 +24,7 @@ final class StatusBarManager: NSObject {
         button.action = #selector(togglePopover)
         button.target = self
 
-        let pop = NSPopover()
-        pop.contentSize = NSSize(width: 300, height: 420)
-        pop.behavior = .transient
-        pop.animates = true
-        pop.contentViewController = NSHostingController(
+        let hostingView = NSHostingController(
             rootView: MenuBarView()
                 .environmentObject(viewModel)
                 .environment(\.closePopover) { [weak self] in
@@ -35,7 +34,42 @@ final class StatusBarManager: NSObject {
                     self?.handleItemSelected(item)
                 }
         )
-        self.popover = pop
+
+        let p = NSPanel(
+            contentRect: NSRect(x: 0, y: 0, width: 300, height: 420),
+            styleMask: [.nonactivatingPanel, .fullSizeContentView],
+            backing: .buffered,
+            defer: true
+        )
+        p.isFloatingPanel = true
+        p.level = .popUpMenu
+        p.isOpaque = false
+        p.backgroundColor = .clear
+        p.hasShadow = true
+        p.contentViewController = hostingView
+        p.isMovableByWindowBackground = false
+        p.hidesOnDeactivate = false
+
+        // 毛玻璃背景 + 圆角
+        let visualEffect = NSVisualEffectView()
+        visualEffect.material = .popover
+        visualEffect.state = .active
+        visualEffect.blendingMode = .behindWindow
+        visualEffect.wantsLayer = true
+        visualEffect.layer?.cornerRadius = 12
+        visualEffect.layer?.masksToBounds = true
+        p.contentView = visualEffect
+
+        hostingView.view.translatesAutoresizingMaskIntoConstraints = false
+        visualEffect.addSubview(hostingView.view)
+        NSLayoutConstraint.activate([
+            hostingView.view.topAnchor.constraint(equalTo: visualEffect.topAnchor),
+            hostingView.view.bottomAnchor.constraint(equalTo: visualEffect.bottomAnchor),
+            hostingView.view.leadingAnchor.constraint(equalTo: visualEffect.leadingAnchor),
+            hostingView.view.trailingAnchor.constraint(equalTo: visualEffect.trailingAnchor),
+        ])
+
+        self.panel = p
 
         GlobalHotKeyManager.shared.onHotKey = { [weak self] in
             self?.togglePopover()
@@ -44,7 +78,7 @@ final class StatusBarManager: NSObject {
     }
 
     @objc private func togglePopover() {
-        if popover?.isShown == true {
+        if isShown {
             closePopover()
         } else {
             showPopover()
@@ -52,23 +86,52 @@ final class StatusBarManager: NSObject {
     }
 
     private func showPopover() {
-        guard let button = statusItem?.button, let popover = popover else { return }
+        guard let button = statusItem?.button, let panel = panel else { return }
         if let frontmost = NSWorkspace.shared.frontmostApplication,
            frontmost.bundleIdentifier != Bundle.main.bundleIdentifier {
             previousApp = frontmost
         }
+
+        // 计算面板位置：紧贴状态栏按钮下方居中
+        let buttonRect = button.window!.convertToScreen(button.convert(button.bounds, to: nil))
+        let panelWidth: CGFloat = 300
+        let panelHeight: CGFloat = 420
+        let x = buttonRect.minX
+        let y = buttonRect.minY - panelHeight - 4
+        panel.setFrame(NSRect(x: x, y: y, width: panelWidth, height: panelHeight), display: true)
+
         NSApp.activate(ignoringOtherApps: true)
-        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
+        panel.makeKeyAndOrderFront(nil)
+
+        startEventMonitor()
     }
 
     private func closePopover() {
-        popover?.close()
+        panel?.orderOut(nil)
+        stopEventMonitor()
         restoreFocus()
+    }
+
+    /// 点击面板外部时自动关闭
+    private func startEventMonitor() {
+        stopEventMonitor()
+        eventMonitor = NSEvent.addGlobalMonitorForEvents(matching: [.leftMouseDown, .rightMouseDown]) { [weak self] event in
+            guard let self = self, self.isShown else { return }
+            self.closePopover()
+        }
+    }
+
+    private func stopEventMonitor() {
+        if let monitor = eventMonitor {
+            NSEvent.removeMonitor(monitor)
+            eventMonitor = nil
+        }
     }
 
     /// 选中条目后的完整流程：关面板 → 恢复焦点 → 写剪贴板 → 模拟粘贴
     private func handleItemSelected(_ item: ClipboardItem) {
-        popover?.close()
+        panel?.orderOut(nil)
+        stopEventMonitor()
 
         // 暂停剪贴板监控，避免我们自己写入剪贴板被当成新条目
         ClipboardMonitor.shared.stopMonitoring()

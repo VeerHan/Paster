@@ -228,29 +228,30 @@ struct MenuBarView: View {
             Divider()
 
             // 剪贴板列表
-            ScrollView {
-                Group {
-                    if viewModel.filteredItems.isEmpty {
-                        EmptyHistoryView()
-                    } else {
-                        LazyVStack(alignment: .leading, spacing: 0) {
-                            ForEach(viewModel.filteredItems.prefix(100)) { item in
-                                MenuBarItemRow(item: item) { itemToDelete in
-                                    ClipboardHistory.shared.deleteItem(itemToDelete)
-                                }
-                                .onTapGesture {
-                                    pasteAndClose?(item)
-                                }
-                            }
-                        }
-                        .frame(maxWidth: .infinity, minHeight: 340, alignment: .topLeading)
+            if viewModel.filteredItems.isEmpty {
+                EmptyHistoryView()
+                    .frame(height: 340)
+            } else {
+                List(viewModel.filteredItems.prefix(50), id: \.id) { item in
+                    MenuBarItemRow(item: item) { itemToDelete in
+                        ClipboardHistory.shared.deleteItem(itemToDelete)
                     }
+                    .onTapGesture {
+                        pasteAndClose?(item)
+                    }
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.clear)
                 }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .safeAreaInset(edge: .top, spacing: 0) { Spacer().frame(height: 6) }
+                .safeAreaInset(edge: .bottom, spacing: 0) { Spacer().frame(height: 6) }
+                .frame(height: 340)
             }
-            .frame(height: 340)
         }
         .frame(width: 300)
-        .background(.ultraThinMaterial)
+        .background(.clear)
         .animation(.easeInOut(duration: 0.2), value: showSearch)
     }
 
@@ -282,9 +283,8 @@ struct MenuBarItemRow: View {
     @State private var isHovered = false
 
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
+        HStack(alignment: .center, spacing: 8) {
             TypeBadge(contentType: item.contentType)
-                .frame(width: 28, height: 28)
 
             VStack(alignment: .leading, spacing: 2) {
                 if item.contentType == .image, let imageData = item.imageData,
@@ -305,18 +305,7 @@ struct MenuBarItemRow: View {
 
             Spacer()
 
-            if isHovered {
-                Button {
-                    onDelete(item)
-                } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
-                .buttonStyle(.plain)
-                .help("删除")
-                .padding(.trailing, 8)
-            } else if item.isPinned {
+            if !isHovered && item.isPinned {
                 Image(systemName: "pin.fill")
                     .font(.caption)
                     .foregroundColor(.orange)
@@ -327,6 +316,21 @@ struct MenuBarItemRow: View {
         .padding(.vertical, 8)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .overlay(alignment: .topTrailing) {
+            if isHovered {
+                Button {
+                    onDelete(item)
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(.secondary)
+                }
+                .buttonStyle(.plain)
+                .help("删除")
+                .padding(.top, 6)
+                .padding(.trailing, 4)
+            }
+        }
         .background(isHovered ? Color(NSColor.selectedContentBackgroundColor).opacity(0.3) : (item.isPinned ? Color.orange.opacity(0.05) : Color.clear))
         .cornerRadius(6)
         .onHover { hovering in
