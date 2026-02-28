@@ -1,6 +1,11 @@
 import SwiftUI
 import AppKit
 
+/// 可接收键盘输入的浮动面板
+private final class KeyablePanel: NSPanel {
+    override var canBecomeKey: Bool { true }
+}
+
 /// 状态栏图标 + 面板管理（支持点击图标与全局快捷键唤起）
 final class StatusBarManager: NSObject {
     static let shared = StatusBarManager()
@@ -35,12 +40,13 @@ final class StatusBarManager: NSObject {
                 }
         )
 
-        let p = NSPanel(
+        let p = KeyablePanel(
             contentRect: NSRect(x: 0, y: 0, width: 300, height: 420),
             styleMask: [.nonactivatingPanel, .fullSizeContentView],
             backing: .buffered,
             defer: true
         )
+        p.becomesKeyOnlyIfNeeded = true
         p.isFloatingPanel = true
         p.level = .popUpMenu
         p.isOpaque = false

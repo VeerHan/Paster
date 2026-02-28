@@ -140,6 +140,7 @@ struct MenuBarView: View {
     @Environment(\.closePopover) private var closePopover
     @Environment(\.pasteAndClose) private var pasteAndClose
     @State private var showSearch = false
+    @FocusState private var isSearchFocused: Bool
 
     var body: some View {
         VStack(spacing: 0) {
@@ -205,6 +206,7 @@ struct MenuBarView: View {
                         .foregroundColor(.secondary)
                     TextField("搜索...", text: $viewModel.searchText)
                         .textFieldStyle(.plain)
+                        .focused($isSearchFocused)
 
                     if !viewModel.searchText.isEmpty {
                         Button {
@@ -223,6 +225,11 @@ struct MenuBarView: View {
                 .padding(.horizontal)
                 .padding(.bottom, 8)
                 .transition(.opacity.combined(with: .move(edge: .top)))
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                        isSearchFocused = true
+                    }
+                }
             }
 
             Divider()
