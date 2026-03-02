@@ -1,5 +1,5 @@
 ---
-description: 改完代码后必须重新编译安装并重启 Paster 应用
+description: 每次改动后必须重新编译、安装到应用程序、杀死当前 app 并重启
 alwaysApply: true
 ---
 

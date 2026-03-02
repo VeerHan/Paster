@@ -320,8 +320,6 @@ struct MenuBarItemRow: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
-            TypeBadge(contentType: item.contentType)
-
             VStack(alignment: .leading, spacing: 2) {
                 if item.contentType == .image, let imageData = item.imageData,
                    let thumb = ThumbnailCache.shared.thumbnail(for: item.id, imageData: imageData) {
