@@ -242,7 +242,7 @@ struct MenuBarView: View {
             }
 
             Divider()
-                .opacity(0.3)
+                .opacity(0.6)
                 .padding(.horizontal, 14)
 
             // 剪贴板列表
@@ -286,7 +286,7 @@ struct MenuBarView: View {
             }
         }
         .frame(width: 300)
-        .background(.clear)
+        .modifier(LiquidGlassModifier())
         .animation(.easeInOut(duration: 0.2), value: showSearch)
         .onReceive(NotificationCenter.default.publisher(for: .panelDidShow)) { _ in
             scrollToTopTrigger = UUID()
@@ -323,8 +323,8 @@ struct MenuBarItemRow: View {
 
     private var hoverBackground: Color {
         colorScheme == .dark
-            ? Color.white.opacity(0.1)
-            : Color.black.opacity(0.06)
+            ? Color.gray.opacity(0.2)
+            : Color.gray.opacity(0.35)
     }
 
     var body: some View {
@@ -377,6 +377,16 @@ struct MenuBarItemRow: View {
         .cornerRadius(6)
         .onHover { hovering in
             isHovered = hovering
+        }
+    }
+}
+
+private struct LiquidGlassModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            content.glassEffect(.regular.interactive(), in: .rect(cornerRadius: 12))
+        } else {
+            content.background(.clear)
         }
     }
 }

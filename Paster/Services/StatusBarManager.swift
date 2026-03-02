@@ -56,27 +56,31 @@ final class StatusBarManager: NSObject {
         p.isMovableByWindowBackground = false
         p.hidesOnDeactivate = false
 
-        // 毛玻璃背景 + 圆角
-        let visualEffect = NSVisualEffectView()
-        visualEffect.material = .menu
-        visualEffect.state = .active
-        visualEffect.blendingMode = .behindWindow
-        visualEffect.wantsLayer = true
-        visualEffect.layer?.cornerRadius = 12
-        visualEffect.layer?.masksToBounds = true
-        if let filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 40]) {
-            visualEffect.backgroundFilters = [filter]
-        }
-        p.contentView = visualEffect
+        if #unavailable(macOS 26.0) {
+            // macOS 26 以下：NSVisualEffectView 毛玻璃 + 圆角
+            let visualEffect = NSVisualEffectView()
+            visualEffect.material = .menu
+            visualEffect.state = .active
+            visualEffect.blendingMode = .behindWindow
+            visualEffect.wantsLayer = true
+            visualEffect.layer?.cornerRadius = 12
+            visualEffect.layer?.masksToBounds = true
+            p.contentView = visualEffect
 
-        hostingView.view.translatesAutoresizingMaskIntoConstraints = false
-        visualEffect.addSubview(hostingView.view)
-        NSLayoutConstraint.activate([
-            hostingView.view.topAnchor.constraint(equalTo: visualEffect.topAnchor),
-            hostingView.view.bottomAnchor.constraint(equalTo: visualEffect.bottomAnchor),
-            hostingView.view.leadingAnchor.constraint(equalTo: visualEffect.leadingAnchor),
-            hostingView.view.trailingAnchor.constraint(equalTo: visualEffect.trailingAnchor),
-        ])
+            hostingView.view.translatesAutoresizingMaskIntoConstraints = false
+            visualEffect.addSubview(hostingView.view)
+            NSLayoutConstraint.activate([
+                hostingView.view.topAnchor.constraint(equalTo: visualEffect.topAnchor),
+                hostingView.view.bottomAnchor.constraint(equalTo: visualEffect.bottomAnchor),
+                hostingView.view.leadingAnchor.constraint(equalTo: visualEffect.leadingAnchor),
+                hostingView.view.trailingAnchor.constraint(equalTo: visualEffect.trailingAnchor),
+            ])
+        } else {
+            // macOS 26+：Liquid Glass 由 SwiftUI 处理，窗口层做圆角裁剪
+            hostingView.view.wantsLayer = true
+            hostingView.view.layer?.cornerRadius = 12
+            hostingView.view.layer?.masksToBounds = true
+        }
 
         self.panel = p
 
