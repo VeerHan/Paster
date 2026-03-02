@@ -229,7 +229,7 @@ struct MenuBarView: View {
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 10)
-                .background(colorScheme == .dark ? Color(white: 0.22) : Color(white: 0.90))
+                .background(Color.primary.opacity(0.06))
                 .cornerRadius(8)
                 .padding(.horizontal)
                 .padding(.bottom, 8)
@@ -317,6 +317,13 @@ struct MenuBarItemRow: View {
     let item: ClipboardItem
     let onDelete: (ClipboardItem) -> Void
     @State private var isHovered = false
+    @Environment(\.colorScheme) private var colorScheme
+
+    private var hoverBackground: Color {
+        colorScheme == .dark
+            ? Color.white.opacity(0.1)
+            : Color.black.opacity(0.06)
+    }
 
     var body: some View {
         HStack(alignment: .center, spacing: 8) {
@@ -364,7 +371,7 @@ struct MenuBarItemRow: View {
                 .padding(.trailing, 4)
             }
         }
-        .background(isHovered ? Color(NSColor.selectedContentBackgroundColor).opacity(0.3) : (item.isPinned ? Color.orange.opacity(0.05) : Color.clear))
+        .background(isHovered ? hoverBackground : (item.isPinned ? Color.orange.opacity(0.05) : Color.clear))
         .cornerRadius(6)
         .onHover { hovering in
             isHovered = hovering

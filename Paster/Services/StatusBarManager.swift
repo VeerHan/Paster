@@ -58,7 +58,7 @@ final class StatusBarManager: NSObject {
 
         // 毛玻璃背景 + 圆角
         let visualEffect = NSVisualEffectView()
-        visualEffect.material = .popover
+        visualEffect.material = .menu
         visualEffect.state = .active
         visualEffect.blendingMode = .behindWindow
         visualEffect.wantsLayer = true
