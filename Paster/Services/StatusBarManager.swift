@@ -64,6 +64,9 @@ final class StatusBarManager: NSObject {
         visualEffect.wantsLayer = true
         visualEffect.layer?.cornerRadius = 12
         visualEffect.layer?.masksToBounds = true
+        if let filter = CIFilter(name: "CIGaussianBlur", parameters: ["inputRadius": 40]) {
+            visualEffect.backgroundFilters = [filter]
+        }
         p.contentView = visualEffect
 
         hostingView.view.translatesAutoresizingMaskIntoConstraints = false

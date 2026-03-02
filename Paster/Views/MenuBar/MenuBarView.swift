@@ -242,6 +242,8 @@ struct MenuBarView: View {
             }
 
             Divider()
+                .opacity(0.3)
+                .padding(.horizontal, 14)
 
             // 剪贴板列表
             if viewModel.filteredItems.isEmpty {
