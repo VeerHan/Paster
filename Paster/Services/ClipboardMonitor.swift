@@ -12,8 +12,10 @@ class ClipboardMonitor: ObservableObject {
     private var changeCount: Int = 0
     private let queue = DispatchQueue(label: "com.paster.clipboard", qos: .utility)
     private let idleInterval: TimeInterval = 2.0
-    private let activeInterval: TimeInterval = 0.5
+    private let activeInterval: TimeInterval = 0.2
     private let idleAfterSeconds: TimeInterval = 8.0
+    private let readRetryDelay: TimeInterval = 0.08
+    private let maxReadAttempts = 4
     private var lastChangeAt: Date = Date()
     private var currentInterval: TimeInterval = 1.0
 
@@ -59,7 +61,7 @@ class ClipboardMonitor: ObservableObject {
             changeCount = currentChangeCount
             lastChangeAt = Date()
             updateTimerIntervalIfNeeded()
-            handlePasteboardChange()
+            handlePasteboardChange(expectedChangeCount: currentChangeCount, attemptsRemaining: maxReadAttempts)
         } else {
             updateTimerIntervalIfNeeded()
         }
@@ -76,11 +78,23 @@ class ClipboardMonitor: ObservableObject {
         timer.schedule(deadline: .now() + currentInterval, repeating: currentInterval, leeway: .milliseconds(250))
     }
 
-    private func handlePasteboardChange() {
-        let pb = pasteboard
-        DispatchQueue.main.async {
-            guard let item = ClipboardItem.fromPasteboard(pb) else { return }
-            ClipboardHistory.shared.addItem(item)
+    private func handlePasteboardChange(expectedChangeCount: Int, attemptsRemaining: Int) {
+        guard pasteboard.changeCount == expectedChangeCount else { return }
+
+        if let item = ClipboardItem.fromPasteboard(pasteboard) {
+            DispatchQueue.main.async {
+                ClipboardHistory.shared.addItem(item)
+            }
+            return
+        }
+
+        guard attemptsRemaining > 1 else { return }
+
+        queue.asyncAfter(deadline: .now() + readRetryDelay) { [weak self] in
+            self?.handlePasteboardChange(
+                expectedChangeCount: expectedChangeCount,
+                attemptsRemaining: attemptsRemaining - 1
+            )
         }
     }
 }

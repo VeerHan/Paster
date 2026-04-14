@@ -1,22 +1,15 @@
 import Foundation
-import Combine
 
 /// 剪贴板历史记录管理
 class ClipboardHistory: ObservableObject {
     static let shared = ClipboardHistory()
+    private enum Limits {
+        static let maxHistoryCount = 500
+        static let maxImageCount = 50
+    }
 
     @Published private(set) var items: [ClipboardItem] = []
     @Published var pinnedItems: [ClipboardItem] = []
-
-    private var maxHistoryCount: Int {
-        let value = UserDefaults.standard.integer(forKey: "maxHistoryCount")
-        return value > 0 ? value : 500
-    }
-
-    private var maxImageCount: Int {
-        let value = UserDefaults.standard.integer(forKey: "maxImageCount")
-        return value > 0 ? value : 50
-    }
     private var imageCount = 0
 
     private let storageService: StorageService
@@ -24,6 +17,7 @@ class ClipboardHistory: ObservableObject {
     private init() {
         self.storageService = StorageService()
         loadHistory()
+        applyLimitsAndSaveIfNeeded()
     }
 
     // MARK: - 公开方法
@@ -38,22 +32,14 @@ class ClipboardHistory: ObservableObject {
         // 检查图片数量限制
         if item.contentType == .image {
             imageCount += 1
-            if imageCount > maxImageCount {
+            if imageCount > Limits.maxImageCount {
                 removeOldestImage()
             }
         }
 
         items.insert(item, at: 0)
 
-        // 移除超出限制的条目
-        while items.count > maxHistoryCount {
-            let removed = items.removeLast()
-            if removed.contentType == .image {
-                imageCount -= 1
-            }
-        }
-
-        saveHistory()
+        applyLimitsAndSaveIfNeeded()
     }
 
     /// 删除单个条目
@@ -147,6 +133,29 @@ class ClipboardHistory: ObservableObject {
             let removed = items.remove(at: index)
             imageCount -= 1
             storageService.deleteImage(for: removed.id)
+        }
+    }
+
+    private func applyLimitsAndSaveIfNeeded() {
+        let originalItemCount = items.count
+        let originalImageCount = imageCount
+
+        while items.count > Limits.maxHistoryCount {
+            let removed = items.removeLast()
+            if removed.contentType == .image {
+                imageCount -= 1
+                storageService.deleteImage(for: removed.id)
+            }
+        }
+
+        while imageCount > Limits.maxImageCount {
+            removeOldestImage()
+        }
+
+        if items.count != originalItemCount || imageCount != originalImageCount {
+            saveHistory()
+        } else if originalItemCount > 0 {
+            saveHistory()
         }
     }
 

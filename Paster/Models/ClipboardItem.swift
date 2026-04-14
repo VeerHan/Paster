@@ -66,8 +66,6 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
 
     /// 从 NSPasteboard 创建剪贴板条目（仅文本和图片，忽略文件）
     static func fromPasteboard(_ pasteboard: NSPasteboard) -> ClipboardItem? {
-        guard pasteboard.changeCount > 0 else { return nil }
-
         let types = pasteboard.types ?? []
 
         // 如果剪贴板包含文件 URL，说明用户复制的是文件，直接忽略
@@ -86,7 +84,10 @@ struct ClipboardItem: Identifiable, Codable, Equatable, Hashable {
         }
 
         // 2. 检测纯文本
-        if let text = pasteboard.string(forType: .string), !text.isEmpty {
+        if let text = pasteboard.string(forType: .string) {
+            let hasVisibleText = text.rangeOfCharacter(from: CharacterSet.whitespacesAndNewlines.inverted) != nil
+            guard hasVisibleText else { return nil }
+
             return ClipboardItem(
                 contentType: .plainText,
                 textContent: text

@@ -79,7 +79,6 @@ struct SwipeGestureView: NSViewRepresentable {
         
         @objc func handlePan(_ gesture: NSPanGestureRecognizer) {
             let translation = gesture.translation(in: gesture.view)
-            let velocity = gesture.velocity(in: gesture.view)
             
             switch gesture.state {
             case .began:
@@ -92,7 +91,6 @@ struct SwipeGestureView: NSViewRepresentable {
                     
                     // 如果水平滑动占主导
                     if horizontalDistance > verticalDistance * 1.5 {
-                        let progress = min(abs(translation.x) / 100.0, 1.0)
                         onSwipeProgress(-abs(translation.x))
                     }
                 }
