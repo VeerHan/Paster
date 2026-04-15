@@ -141,9 +141,7 @@ struct MenuBarView: View {
     @EnvironmentObject var viewModel: ClipboardViewModel
     @Environment(\.closePopover) private var closePopover
     @Environment(\.pasteAndClose) private var pasteAndClose
-    @Environment(\.colorScheme) private var colorScheme
     @State private var showSearch = false
-    @State private var showClearHistoryConfirmation = false
     @State private var scrollToTopTrigger = UUID()
     @FocusState private var isSearchFocused: Bool
 
@@ -181,7 +179,12 @@ struct MenuBarView: View {
 
                 // 清空按钮
                 Button {
-                    showClearHistoryConfirmation = true
+                    withAnimation(.easeInOut(duration: 0.2)) {
+                        ClipboardHistory.shared.clearHistory()
+                        ThumbnailCache.shared.evictAll()
+                        viewModel.searchText = ""
+                        showSearch = false
+                    }
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(hasItems ? .secondary : .secondary.opacity(0.4))
@@ -289,17 +292,6 @@ struct MenuBarView: View {
         .frame(width: 300)
         .modifier(LiquidGlassModifier())
         .animation(.easeInOut(duration: 0.2), value: showSearch)
-        .alert("确认清空历史记录？", isPresented: $showClearHistoryConfirmation) {
-            Button("取消", role: .cancel) {}
-            Button("清空", role: .destructive) {
-                ClipboardHistory.shared.clearHistory()
-                ThumbnailCache.shared.evictAll()
-                viewModel.searchText = ""
-                withAnimation(.easeInOut(duration: 0.2)) { showSearch = false }
-            }
-        } message: {
-            Text("清空后无法恢复，包含已置顶条目。")
-        }
         .onReceive(NotificationCenter.default.publisher(for: .panelDidShow)) { _ in
             scrollToTopTrigger = UUID()
         }
