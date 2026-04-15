@@ -143,6 +143,7 @@ struct MenuBarView: View {
     @Environment(\.pasteAndClose) private var pasteAndClose
     @Environment(\.colorScheme) private var colorScheme
     @State private var showSearch = false
+    @State private var showClearHistoryConfirmation = false
     @State private var scrollToTopTrigger = UUID()
     @FocusState private var isSearchFocused: Bool
 
@@ -180,11 +181,7 @@ struct MenuBarView: View {
 
                 // 清空按钮
                 Button {
-                    ClipboardHistory.shared.clearHistory()
-                    ClipboardHistory.shared.clearImageCache()
-                    ThumbnailCache.shared.evictAll()
-                    viewModel.searchText = ""
-                    withAnimation(.easeInOut(duration: 0.2)) { showSearch = false }
+                    showClearHistoryConfirmation = true
                 } label: {
                     Image(systemName: "trash")
                         .foregroundColor(hasItems ? .secondary : .secondary.opacity(0.4))
@@ -252,14 +249,20 @@ struct MenuBarView: View {
                     let items = Array(viewModel.filteredItems.prefix(50))
                     List(items.indices, id: \.self) { index in
                         let item = items[index]
-                        MenuBarItemRow(item: item) { itemToDelete in
-                            ClipboardHistory.shared.deleteItem(itemToDelete)
-                        }
+                        MenuBarItemRow(
+                            item: item,
+                            onTogglePin: { itemToPin in
+                                viewModel.history.togglePin(for: itemToPin)
+                            },
+                            onDelete: { itemToDelete in
+                                ClipboardHistory.shared.deleteItem(itemToDelete)
+                            }
+                        )
                         .onTapGesture {
                             pasteAndClose?(item)
                         }
-                        .padding(.top, index == 0 ? 4 : 0)
-                        .padding(.bottom, index == items.count - 1 ? 4 : 0)
+                        .padding(.top, index == 0 ? 4 : 3)
+                        .padding(.bottom, index == items.count - 1 ? 4 : 3)
                         .listRowInsets(EdgeInsets())
                         .listRowSeparator(.hidden)
                         .listRowBackground(Color.clear)
@@ -286,6 +289,17 @@ struct MenuBarView: View {
         .frame(width: 300)
         .modifier(LiquidGlassModifier())
         .animation(.easeInOut(duration: 0.2), value: showSearch)
+        .alert("确认清空历史记录？", isPresented: $showClearHistoryConfirmation) {
+            Button("取消", role: .cancel) {}
+            Button("清空", role: .destructive) {
+                ClipboardHistory.shared.clearHistory()
+                ThumbnailCache.shared.evictAll()
+                viewModel.searchText = ""
+                withAnimation(.easeInOut(duration: 0.2)) { showSearch = false }
+            }
+        } message: {
+            Text("清空后无法恢复，包含已置顶条目。")
+        }
         .onReceive(NotificationCenter.default.publisher(for: .panelDidShow)) { _ in
             scrollToTopTrigger = UUID()
         }
@@ -315,6 +329,7 @@ struct EmptyHistoryView: View {
 /// 菜单栏条目行 — 独立于 ViewModel，hover 不会触发列表重绘
 struct MenuBarItemRow: View {
     let item: ClipboardItem
+    let onTogglePin: (ClipboardItem) -> Void
     let onDelete: (ClipboardItem) -> Void
     @State private var isHovered = false
     @Environment(\.colorScheme) private var colorScheme
@@ -344,13 +359,6 @@ struct MenuBarItemRow: View {
             }
 
             Spacer()
-
-            if !isHovered && item.isPinned {
-                Image(systemName: "pin.fill")
-                    .font(.caption)
-                    .foregroundColor(.orange)
-                    .help("已固定")
-            }
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 8)
@@ -358,16 +366,20 @@ struct MenuBarItemRow: View {
         .contentShape(Rectangle())
         .overlay(alignment: .topTrailing) {
             if isHovered {
-                Button {
-                    onDelete(item)
+                Menu {
+                    Button(item.isPinned ? "取消置顶" : "置顶") {
+                        onTogglePin(item)
+                    }
+                    Button("删除", role: .destructive) {
+                        onDelete(item)
+                    }
                 } label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .font(.system(size: 14))
-                        .foregroundColor(.secondary)
+                    Text("")
+                        .frame(width: 8, height: 14)
                 }
-                .buttonStyle(.plain)
-                .help("删除")
-                .padding(.top, 6)
+                .menuStyle(.borderlessButton)
+                .help("更多操作")
+                .padding(.top, 4)
                 .padding(.trailing, 4)
             }
         }

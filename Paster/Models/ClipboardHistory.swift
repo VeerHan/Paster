@@ -37,7 +37,9 @@ class ClipboardHistory: ObservableObject {
             }
         }
 
-        items.insert(item, at: 0)
+        // 新复制的条目应排在置顶项之后，避免把固定项挤下去。
+        let insertIndex = (items.lastIndex(where: \.isPinned) ?? -1) + 1
+        items.insert(item, at: insertIndex)
 
         applyLimitsAndSaveIfNeeded()
     }
@@ -70,16 +72,15 @@ class ClipboardHistory: ObservableObject {
         saveHistory()
     }
 
-    /// 清空历史记录（保留固定条目）
+    /// 清空历史记录
     func clearHistory() {
-        let unpinnedItems = items.filter { !$0.isPinned }
-        for item in unpinnedItems {
+        for item in items {
             if item.contentType == .image {
-                imageCount -= 1
                 storageService.deleteImage(for: item.id)
             }
         }
-        items.removeAll { !$0.isPinned }
+        items.removeAll()
+        imageCount = 0
         saveHistory()
     }
 
@@ -91,7 +92,17 @@ class ClipboardHistory: ObservableObject {
     /// 切换固定状态
     func togglePin(for item: ClipboardItem) {
         if let index = items.firstIndex(where: { $0.id == item.id }) {
-            items[index].isPinned.toggle()
+            var updatedItem = items.remove(at: index)
+            updatedItem.isPinned.toggle()
+
+            // 新固定的条目立即置顶；取消固定后则按创建时间回到普通条目区域。
+            if updatedItem.isPinned {
+                items.insert(updatedItem, at: 0)
+            } else {
+                let insertIndex = insertionIndexForUnpinnedItem(updatedItem)
+                items.insert(updatedItem, at: insertIndex)
+            }
+
             saveHistory()
         }
     }
@@ -141,6 +152,18 @@ class ClipboardHistory: ObservableObject {
             imageCount -= 1
             storageService.deleteImage(for: removed.id)
         }
+    }
+
+    /// 非置顶条目按创建时间倒序排列，并始终排在置顶组之后。
+    private func insertionIndexForUnpinnedItem(_ item: ClipboardItem) -> Int {
+        let unpinnedStartIndex = (items.lastIndex(where: \.isPinned) ?? -1) + 1
+
+        guard let relativeIndex = items[unpinnedStartIndex...]
+            .firstIndex(where: { !$0.isPinned && $0.createdAt < item.createdAt }) else {
+            return items.count
+        }
+
+        return relativeIndex
     }
 
     /// 保持当前历史首项绝对置顶，其余条目继续让固定项排在前面
