@@ -144,6 +144,8 @@ final class StatusBarManager: NSObject {
 
     /// 选中条目后的完整流程：关面板 → 恢复焦点 → 写剪贴板 → 模拟粘贴
     private func handleItemSelected(_ item: ClipboardItem) {
+        viewModel.history.moveItemToFront(item)
+
         panel?.orderOut(nil)
         stopEventMonitor()
 

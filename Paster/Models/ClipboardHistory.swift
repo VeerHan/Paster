@@ -96,23 +96,30 @@ class ClipboardHistory: ObservableObject {
         }
     }
 
+    /// 将指定条目移动到历史记录最前面
+    func moveItemToFront(_ item: ClipboardItem) {
+        guard let index = items.firstIndex(where: { $0.id == item.id }), index != 0 else {
+            return
+        }
+
+        let targetItem = items.remove(at: index)
+        items.insert(targetItem, at: 0)
+        saveHistory()
+    }
+
     /// 搜索条目
     func searchItems(_ query: String, typeFilter: ClipboardContentType? = nil) -> [ClipboardItem] {
         let filtered = typeFilter != nil ? items.filter { $0.contentType == typeFilter! } : items
 
         if query.isEmpty {
-            let pinned = filtered.filter { $0.isPinned }
-            let normal = filtered.filter { !$0.isPinned }
-            return pinned + normal
+            return orderedItemsKeepingFrontMost(filtered)
         }
 
         let searched = filtered.filter { item in
             item.previewText.localizedCaseInsensitiveContains(query) ||
             item.contentType.displayName.localizedCaseInsensitiveContains(query)
         }
-        let pinned = searched.filter { $0.isPinned }
-        let normal = searched.filter { !$0.isPinned }
-        return pinned + normal
+        return orderedItemsKeepingFrontMost(searched)
     }
 
     /// 获取按类型分组的条目
@@ -134,6 +141,16 @@ class ClipboardHistory: ObservableObject {
             imageCount -= 1
             storageService.deleteImage(for: removed.id)
         }
+    }
+
+    /// 保持当前历史首项绝对置顶，其余条目继续让固定项排在前面
+    private func orderedItemsKeepingFrontMost(_ sourceItems: [ClipboardItem]) -> [ClipboardItem] {
+        guard let firstItem = sourceItems.first else { return [] }
+
+        let remaining = sourceItems.dropFirst()
+        let pinned = remaining.filter(\.isPinned)
+        let normal = remaining.filter { !$0.isPinned }
+        return [firstItem] + pinned + normal
     }
 
     private func applyLimitsAndSaveIfNeeded() {
